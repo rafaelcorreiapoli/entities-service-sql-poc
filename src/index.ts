@@ -1,55 +1,15 @@
-import { GraphQLServer } from 'graphql-yoga'
-import { createTechnology } from './db/technology'
-import { createProject } from './db/project';
 import { createSystem } from './components/system'
+import { ENV } from './components/config';
+import { stringToEnv } from './utils/string-to-env'
+import { justSomeTests } from './just-some-tests/1'
 
+const env: ENV = stringToEnv(process.env.NODE_ENV)
 
-const main = async () => {
-  const sys = await createSystem('dev')
-
-
-  
-  const tech = await createTechnology({
-    name: 'Teste'
-  }, sys.models.technology)
-
-  const tech2 = await createTechnology({
-    name: 'Tech 2'
-  }, sys.models.technology)
-
-  const tech3 = await createTechnology({
-    name: 'Tech 3'
-  }, sys.models.technology)
-  
-
-  const project = await createProject({
-    name: 'My project'
-  }, sys.models.project)
-
-  const project2 = await createProject({
-    name: 'My project 2'
-  }, sys.models.project)
-  
-  await tech.addProject(project)
-
-  await tech.addChildTechnology(tech2)
-  await tech.addChildTechnology(tech3)
-  await tech2.addChildTechnology(tech3)
-
-  const tech1Children = await tech.getChildTechnologies()
-  const childrenJson = tech1Children.map(x => x.toJSON())
-  console.log(childrenJson)
-
-  const tech2Parents = await tech2.getParentTechnologies()
-  const tech2ParentsJson = tech2Parents.map(x => x.toJSON())
-  console.log(tech2ParentsJson)
-
-  const tech3Parents = await tech3.getParentTechnologies()
-  const tech3ParentsJson = tech3Parents.map(x => x.toJSON())
-  console.log(tech3ParentsJson)
+const main = async (env: ENV) => {
+  const sys = await createSystem(env)
+  justSomeTests(sys)
 }
 
-main()
-.catch(err => {
+main(env).catch(err => {
   console.log(err)
 })
