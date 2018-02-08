@@ -19,7 +19,18 @@ type Technology {
   parentTechnologies: [Technology]
 }
 
+type User {
+  email: String!
+  name: String!
+  scopes: [String!]!
+}
+type AuthPayload {
+  user: User!
+  token: String!
+}
+
 type Mutation {
   createTechnology(name: String!): Technology
+  signup(email: String!, password: String!, name: String!): AuthPayload
 }
 `

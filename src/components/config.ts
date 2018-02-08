@@ -14,7 +14,8 @@ export interface IConfig {
   },
   service: {
     port: number
-  }
+  },
+  hashSecret: string
 }
 export const newConfig = (env: ENV): IConfig => {
   switch (env) {
@@ -30,7 +31,8 @@ export const newConfig = (env: ENV): IConfig => {
         },
         service: {
           port: 3000
-        }
+        },
+        hashSecret: 'Lalala'
       }
     case ENV.prod:
       return {
@@ -43,7 +45,8 @@ export const newConfig = (env: ENV): IConfig => {
         },
         service: {
           port: 3000
-        }
+        },
+        hashSecret: 'Lalala'
       }
     case ENV.test:
       return {
@@ -56,7 +59,8 @@ export const newConfig = (env: ENV): IConfig => {
         },
         service: {
           port: 3000
-        }
+        },
+        hashSecret: 'Lalala'
       }
   }
 }

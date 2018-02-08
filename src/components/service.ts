@@ -3,6 +3,7 @@ import { typeDefs } from '../graphql/type-defs'
 import { getResolvers } from '../graphql/resolvers';
 import { IModels } from './models'
 import { IConfig } from './config'
+import { getContext } from '../graphql/context'
 
 export interface ICreateService {
   models: IModels
@@ -16,7 +17,7 @@ export const createService = async ({
   models,
 }: ICreateService): Promise<IService> => {
   const resolvers = getResolvers(models)
-  const server = new GraphQLServer({ typeDefs, resolvers })
+  const server = new GraphQLServer({ typeDefs, resolvers, context: (req) => getContext(req, { models, config }) })
   return server.start({
     port: config.service.port
   },  () => console.log(`Server is running on localhost:${config.service.port}`))

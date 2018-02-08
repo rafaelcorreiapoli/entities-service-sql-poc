@@ -1,5 +1,7 @@
 import { resolver } from 'graphql-sequelize'
 import { IModels } from '../components/models';
+import { auth } from './resolvers/mutation/auth';
+import { technology } from './resolvers/mutation/technology';
 
 export const getResolvers = (models: IModels) => {
   const technologyResolver = resolver(models.technology)
@@ -19,11 +21,8 @@ export const getResolvers = (models: IModels) => {
       projects: projectsResolver
     },
     Mutation: {
-      createTechnology: (parent, { name }, { user }, info) => {
-        return {
-          name,
-        }
-      }
+      ...technology,
+      ...auth
     },
     Project: {
       technologies: resolver(models.projectTechnologies, {
