@@ -2,7 +2,11 @@ import { createTechnology } from '../db/technology'
 import { createProject } from '../db/project'
 import { ISystem } from '../components/system'
 
+const toJson = x => x.toJSON()
+const mapJson = x => x.map(toJson)
+
 export const justSomeTests = async (sys: ISystem) => {
+  
   const tech = await createTechnology({
     name: 'Teste'
   }, sys.models.technology)
@@ -30,15 +34,12 @@ export const justSomeTests = async (sys: ISystem) => {
   await tech.addChildTechnology(tech3)
   await tech2.addChildTechnology(tech3)
 
-  const tech1Children = await tech.getChildTechnologies()
-  const childrenJson = tech1Children.map(x => x.toJSON())
-  console.log(childrenJson)
+  const tech1Children = await tech.getChildTechnologies().then(mapJson)
+  console.log(tech1Children)
 
-  const tech2Parents = await tech2.getParentTechnologies()
-  const tech2ParentsJson = tech2Parents.map(x => x.toJSON())
-  console.log(tech2ParentsJson)
+  const tech2Parents = await tech2.getParentTechnologies().then(mapJson)
+  console.log(tech2Parents)
 
-  const tech3Parents = await tech3.getParentTechnologies()
-  const tech3ParentsJson = tech3Parents.map(x => x.toJSON())
-  console.log(tech3ParentsJson)
+  const tech3Parents = await tech3.getParentTechnologies().then(mapJson)
+  console.log(tech3Parents)
 }
