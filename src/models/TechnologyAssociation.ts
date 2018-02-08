@@ -11,5 +11,5 @@ export const createTechnologyAssociationModel = ({ postgres }) => {
       primaryKey: true
     }
   });
-  return TechnologyAssociation.sync({force: true})
+  return TechnologyAssociation.sync()
 }

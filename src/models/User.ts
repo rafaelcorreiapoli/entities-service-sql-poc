@@ -16,5 +16,5 @@ export const createUserModel = ({ postgres }) => {
       type: Sequelize.ARRAY(Sequelize.STRING)
     },
   });
-  return User.sync({force: true})
+  return User.sync()
 }

@@ -1,24 +1,32 @@
-import { GraphQLServer } from 'graphql-yoga'
-import { typeDefs } from '../graphql/type-defs'
-import { getResolvers } from '../graphql/resolvers';
-import { IModels } from './models'
-import { IConfig } from './config'
-import { getContext } from '../graphql/context'
+import * as express from 'express'
+import { IConfig } from './config';
+import { IModels } from './models';
 
-export interface ICreateService {
-  models: IModels
+interface IComponents {
   config: IConfig
+  models: IModels
+  sqs: any
 }
 
-export type IService = any
+export const newService = async (routes, components) => {
+  const app = express();
+  
+  app.use((req, res, next) => {
+    req.components = components
+    next()
+  })
 
-export const createService = async ({
-  config,
-  models,
-}: ICreateService): Promise<IService> => {
-  const resolvers = getResolvers(models)
-  const server = new GraphQLServer({ typeDefs, resolvers, context: (req) => getContext(req, { models, config }) })
-  return server.start({
-    port: config.service.port
-  },  () => console.log(`Server is running on localhost:${config.service.port}`))
+  app.use('/', routes);
+
+  return new Promise((resolve, reject) => {
+    const server = app.listen(components.config.service.port, (err) => {
+      if (err) {
+        console.error(err)
+        reject(err)
+        return
+      }
+      console.log(`Server is running on port ${components.config.service.port}`)
+      resolve(server)  
+    });
+  })
 }

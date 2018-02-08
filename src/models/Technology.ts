@@ -6,5 +6,5 @@ export const createTechnologyModel = ({ postgres }) => {
       type: Sequelize.STRING
     },
   });
-  return Technology.sync({force: true})
+  return Technology.sync()
 }

@@ -31,6 +31,7 @@ type AuthPayload {
 
 type Mutation {
   createTechnology(name: String!): Technology
+  createProject(name: String!): Project
   signup(email: String!, password: String!, name: String!): AuthPayload
   login(email: String!, password: String!): AuthPayload
 }

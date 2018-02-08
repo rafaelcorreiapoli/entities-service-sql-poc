@@ -6,5 +6,5 @@ export const createProjectModel = ({ postgres }) => {
       type: Sequelize.STRING
     },
   });
-  return Project.sync({force: true})
+  return Project.sync()
 }

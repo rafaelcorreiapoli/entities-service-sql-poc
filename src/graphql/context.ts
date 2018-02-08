@@ -15,12 +15,13 @@ import { IConfig } from '../components/config'
 export interface IContext {
   models: IModels
   config: IConfig
+  sqs: any
+  user?: any;
 }
 
-export const getContext = (req, {
-  models,
-  config,
-}): IContext => ({
-  models,
-  config
+export const getContextFromReq = req => ({
+  ...req.components,
+  user: {
+    id: 1
+  }
 })

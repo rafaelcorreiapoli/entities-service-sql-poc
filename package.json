@@ -26,7 +26,10 @@
     "test": "jest --watchAll"
   },
   "dependencies": {
+    "aws-sdk": "^2.190.0",
     "bcryptjs": "^2.4.3",
+    "express": "^4.16.2",
+    "express-graphql": "^0.6.11",
     "graphql-relay": "^0.5.4",
     "graphql-sequelize": "^5.6.1",
     "graphql-yoga": "^1.2.3",
