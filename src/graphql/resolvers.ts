@@ -34,6 +34,8 @@ export const getResolvers = (models: IModels) => {
       projects: resolver(models.technologyProjects, {
         list: true
       }),
+      childTechnologies: resolver(models.technologyChildren),
+      parentTechnologies: resolver(models.technologyParents)
     }
   }
 }
