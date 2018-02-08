@@ -1,8 +1,15 @@
 import * as bcrypt from 'bcryptjs'
 import * as jwt from 'jsonwebtoken'
-import { IContext } from '../../context';
-import { createUser, lookupUser, findUserByEmail } from '../../../db/user'
+import { IContext } from '../../context'
+import { createUser, lookupUser, findUserByEmail, findUserByEmailAndPassword } from '../../../db/user'
 
+
+const generateJwt = (user, secret) => {
+  return jwt.sign({
+    id: user.id,
+    scopes: user.scopes,
+  }, secret)
+}
 export const auth = {
   async signup(parent, { email, password, name }, { models, config }: IContext, info) {
     const encryptedPassword = await bcrypt.hash(password, 10)
@@ -21,28 +28,26 @@ export const auth = {
 
     
     return {
-      token: jwt.sign({
-        id: user.id,
-        scopes: user.scopes,
-      }, config.hashSecret),
+      token: generateJwt(user, config.hashSecret),
       user: user.toJSON(),
     }
   },
 
-  // async login(parent, { email, password }, ctx, info) {
-  //   const user = await ctx.db.query.user({ where: { email } })
-  //   if (!user) {
-  //     throw new Error(`No such user found for email: ${email}`)
-  //   }
+  async login(parent, { email, password }, { models, config }: IContext, info) {
+    const user = await findUserByEmail(email, models.User)
 
-  //   const valid = await bcrypt.compare(password, user.password)
-  //   if (!valid) {
-  //     throw new Error('Invalid password')
-  //   }
+    if (!user) {
+      throw new Error(`No such user found for email: ${email}`)
+    }
 
-  //   return {
-  //     token: jwt.sign({ userId: user.id }, process.env.APP_SECRET),
-  //     user,
-  //   }
-  // },
+    const valid = await bcrypt.compare(password, user.password)
+    if (!valid) {
+      throw new Error('Invalid password')
+    }
+
+    return {
+      token: generateJwt(user, config.hashSecret),
+      user,
+    }
+  },
 }

@@ -16,3 +16,10 @@ export const findUserByEmail = async (email, User) => User.findOne({
     email
   }
 })
+
+export const findUserByEmailAndPassword = async (email, password, User) => User.findOne({
+  where: {
+    email,
+    password
+  }
+})
