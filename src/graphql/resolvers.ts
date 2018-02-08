@@ -3,9 +3,13 @@ import { IModels } from '../components/models';
 
 export const getResolvers = (models: IModels) => {
   const technologyResolver = resolver(models.technology)
-  const technologiesResolver = resolver(models.technology)
+  const technologiesResolver = resolver(models.technology, {
+    list: true
+  })
   const projectResolver = resolver(models.project)
-  const projectsResolver = resolver(models.project)
+  const projectsResolver = resolver(models.project, {
+    list: true
+  })
   
   return {
     Query: {
@@ -22,10 +26,14 @@ export const getResolvers = (models: IModels) => {
       }
     },
     Project: {
-      technologies: resolver(models.projectTechnologies)
+      technologies: resolver(models.projectTechnologies, {
+        list: true
+      })
     },
     Technology: {
-      projects: resolver(models.technologyProjects),
+      projects: resolver(models.technologyProjects, {
+        list: true
+      }),
     }
   }
 }
