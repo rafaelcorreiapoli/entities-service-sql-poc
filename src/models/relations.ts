@@ -6,7 +6,6 @@ export interface IRelations {
 }
 
 export const createRelations = async (models: IBaseModels): Promise<IRelations> => {
-  console.log(`relation`)
   const {
     technology,
     technologyAssociation,
